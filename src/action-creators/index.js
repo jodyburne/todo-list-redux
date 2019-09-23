@@ -26,3 +26,23 @@ export function completeTodo(id) {
     id
   };
 }
+
+export function editTodo(id) {
+  return {
+    type: types.EDIT_TODO,
+    id
+  };
+}
+
+export function updateTodo(todo) {
+  return {
+    type: types.UPDATE_TODO,
+    todo
+  };
+}
+
+export function filter() {
+  return {
+    type: types.FILTER
+  };
+}

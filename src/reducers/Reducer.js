@@ -1,10 +1,18 @@
-import { ADD_NEW, SHOW_LIST, DEL_TODO, TODO_DONE } from '.././actionTypes/actionTypes';
+import {
+  ADD_NEW,
+  SHOW_LIST,
+  DEL_TODO,
+  TODO_DONE,
+  EDIT_TODO,
+  UPDATE_TODO,
+  FILTER
+} from '../actionTypes/actionTypes';
 
 let idCount = 2;
 const initState = {
   todos: [
-    { id: 1, task: 'go gym', accomplished: false },
-    { id: 2, task: 'cook', accomplished: false }
+    { id: 1, task: 'go gym', accomplished: false, edit: false },
+    { id: 2, task: 'cook', accomplished: false, edit: false }
   ]
 };
 
@@ -14,7 +22,10 @@ const addReducer = (state = initState, action) => {
       idCount++;
       return {
         ...state,
-        todos: [...state.todos, { id: idCount, task: action.task, accomplished: false }]
+        todos: [
+          ...state.todos,
+          { id: idCount, task: action.task, accomplished: false, edit: false }
+        ]
       };
     case SHOW_LIST:
       return state;
@@ -30,11 +41,38 @@ const addReducer = (state = initState, action) => {
         state,
         todos: state.todos.map(todo =>
           todo.id === action.id
-            ? { id: action.id, accomplished: action.accomplished, task: todo.task }
+            ? { id: action.id, accomplished: !todo.accomplished, task: todo.task, edit: todo.edit }
             : todo
         )
       };
-
+    case EDIT_TODO:
+      return {
+        state,
+        todos: state.todos.map(todo =>
+          todo.id === action.id
+            ? { id: action.id, accomplished: todo.accomplished, task: todo.task, edit: action.edit }
+            : todo
+        )
+      };
+    case UPDATE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.id
+            ? {
+                id: action.id,
+                accomplished: todo.accomplished,
+                task: action.task,
+                edit: action.edit
+              }
+            : todo
+        )
+      };
+    case FILTER:
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.accomplished === false)
+      };
     default:
       return state;
   }
