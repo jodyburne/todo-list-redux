@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { DEL_TODO, TODO_DONE, EDIT_TODO, FILTER } from './actionTypes/actionTypes';
+import { DEL_TODO, TODO_DONE, EDIT_TODO } from './actionTypes/actionTypes';
 import EditToDo from './EditToDo';
 
 function ToDos(props) {
   const [state, setState] = useState({
     completedChecked: false,
-    sortedChecked: false
+    alpha: false,
+    reverse: false
   });
 
   const handleChange = e => {
-    console.log(e.target.checked);
     setState({
       ...state,
       [e.target.name]: e.target.checked
@@ -21,37 +21,69 @@ function ToDos(props) {
     return state.completedChecked ? todo.accomplished === false : todo;
   };
 
+  const toggleSort = () => {
+    if (state.alpha === false && state.reverse === false) setState({ ...state, alpha: true });
+    else if (state.alpha === true && state.reverse === false)
+      setState({ ...state, alpha: false, reverse: true });
+    else if (state.alpha === false && state.reverse === true)
+      setState({ ...state, reverse: false });
+  };
+
+  const handleSort = (a, b) => {
+    if (state.alpha) return a.task < b.task ? -1 : 1;
+    if (state.reverse) return a.task < b.task ? 1 : -1;
+    return a.id > b.id ? 1 : -1;
+  };
   return (
     <div>
-      <li>
-        {props.todos
+      <button type="button" onClick={toggleSort}>
+        List
+      </button>
+      <table>
+        <thead>
+          <tr>
+            <th>Tasks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.todos
 
-          .filter(todo => filterCompleted(todo))
-          .map(item =>
-            !item.edit ? (
-              <ul
-                key={item.id}
-                style={{
-                  textDecoration: item.accomplished && 'line-through'
-                }}
-              >
-                {item.task}
-
-                <input type="checkbox" name={item.id} onClick={props.handleChecked}></input>
-
-                <button onClick={props.handleDelete} name={item.id}>
-                  delete
-                </button>
-                <button onClick={props.handleEdit} name={item.id}>
-                  Edit
-                </button>
-              </ul>
-            ) : (
-              <EditToDo name={item.id} former={item.task} />
-            )
-          )}
-      </li>
-      <label>Hide completed</label>
+            .filter(todo => filterCompleted(todo))
+            .sort((a, b) => handleSort(a, b))
+            .map(item =>
+              !item.edit ? (
+                <tr key={item.id}>
+                  <td>
+                    <input type="checkbox" name={item.id} onClick={props.handleChecked} />
+                  </td>
+                  <td
+                    style={{
+                      textDecoration: item.accomplished && 'line-through'
+                    }}
+                  >
+                    {item.task}
+                  </td>
+                  <td>
+                    {' '}
+                    <button onClick={props.handleDelete} type="button" name={item.id}>
+                      delete
+                    </button>
+                    <button onClick={props.handleEdit} type="button" name={item.id}>
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ) : (
+                <tr key={item.id}>
+                  <td>
+                    <EditToDo name={item.id} former={item.task} />
+                  </td>
+                </tr>
+              )
+            )}
+        </tbody>
+      </table>
+      <span>Hide completed</span>
       <input
         checked={state.completedChecked}
         name="completedChecked"
@@ -80,10 +112,6 @@ const mapDispatchToProps = dispatch => {
     handleDelete: e => {
       dispatch({ type: DEL_TODO, id: Number(e.target.name) });
     }
-    //   handleFilter: e => {
-    //     let filter
-    //     dispatch({ type: FILTER });
-    //   }
   };
 };
 

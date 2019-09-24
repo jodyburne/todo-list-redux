@@ -12,7 +12,13 @@ function EditToDo(props) {
   return (
     <div>
       <form onSubmit={props.handleUpdate} name={props.name}>
-        <input type="text" name="task" value={taskState} onChange={handleChange} placeholder={props.former}/>
+        <input
+          type="text"
+          name="task"
+          value={taskState}
+          onChange={handleChange}
+          placeholder={props.former}
+        />
         <button name="addToDo" type="submit">
           update
         </button>

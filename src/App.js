@@ -8,12 +8,11 @@ function App() {
       <h1>To Dos:</h1>
       <div>
         <div>
-          <h2>List</h2>
-          <ToDos />
-        </div>
-        <div>
           <h2>Add</h2>
           <NewToDo />
+        </div>
+        <div>
+          <ToDos />
         </div>
       </div>
     </div>

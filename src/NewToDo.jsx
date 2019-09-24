@@ -12,7 +12,13 @@ function NewToDo(props) {
   return (
     <div>
       <form onSubmit={props.handleSubmit}>
-        <input type="text" name="task" value={taskState} onChange={handleChange} />
+        <input
+          type="text"
+          name="task"
+          value={taskState}
+          onChange={handleChange}
+          placeholder="Add new todo here..."
+        />
         <button name="addToDo" type="submit">
           add new
         </button>
@@ -22,9 +28,7 @@ function NewToDo(props) {
 }
 
 const mapStateToProps = state => {
-  return {
-    // todos: state.addReducer.todos
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
