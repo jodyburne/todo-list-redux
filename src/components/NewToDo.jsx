@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { ADD_NEW } from './actionTypes/actionTypes';
+import { InputGroup, InputGroupAddon, Button, Input } from 'reactstrap';
+import { ADD_NEW } from '../actionTypes/actionTypes';
 
 function NewToDo(props) {
   const [taskState, setTaskState] = useState('');
@@ -10,19 +11,24 @@ function NewToDo(props) {
   };
 
   return (
-    <div>
+    <div className="main">
       <form onSubmit={props.handleSubmit}>
-        <input
-          type="text"
-          name="task"
-          value={taskState}
-          onChange={handleChange}
-          placeholder="Add new todo here..."
-        />
-        <button name="addToDo" type="submit">
-          add new
-        </button>
+        <InputGroup>
+          <Input
+            type="text"
+            name="task"
+            value={taskState}
+            onChange={handleChange}
+            placeholder="Add new todo here..."
+          />
+          <InputGroupAddon addonType="append">
+            <Button name="addToDo" type="submit" color="success">
+              Submit!
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
       </form>
+      <br />
     </div>
   );
 }

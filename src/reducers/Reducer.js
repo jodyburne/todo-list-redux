@@ -11,12 +11,12 @@ import {
 let idCount = 2;
 const initState = {
   todos: [
-    { id: 1, task: 'go gym', accomplished: false, edit: false },
-    { id: 2, task: 'cook', accomplished: false, edit: false }
+    { id: 1, task: 'Go to the gym', accomplished: false, edit: false },
+    { id: 2, task: 'Cook dinner', accomplished: false, edit: false }
   ]
 };
 
-const addReducer = (state = initState, action) => {
+const todoReducer = (state = initState, action) => {
   switch (action.type) {
     case ADD_NEW:
       idCount++;
@@ -77,4 +77,4 @@ const addReducer = (state = initState, action) => {
       return state;
   }
 };
-export default addReducer;
+export default todoReducer;

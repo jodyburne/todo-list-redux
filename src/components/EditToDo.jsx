@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { UPDATE_TODO } from './actionTypes/actionTypes';
+import { InputGroup, InputGroupAddon, Button, Input } from 'reactstrap';
+import { UPDATE_TODO } from '../actionTypes/actionTypes';
 
 function EditToDo(props) {
   const [taskState, setTaskState] = useState(props.former);
@@ -12,16 +13,20 @@ function EditToDo(props) {
   return (
     <div>
       <form onSubmit={props.handleUpdate} name={props.name}>
-        <input
-          type="text"
-          name="task"
-          value={taskState}
-          onChange={handleChange}
-          placeholder={props.former}
-        />
-        <button name="addToDo" type="submit">
-          update
-        </button>
+        <InputGroup>
+          <Input
+            type="text"
+            name="task"
+            value={taskState}
+            onChange={handleChange}
+            placeholder={props.former}
+          />
+          <InputGroupAddon addonType="append">
+            <Button name="addToDo" type="submit" color="success">
+              Update!
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
       </form>
     </div>
   );
@@ -29,7 +34,7 @@ function EditToDo(props) {
 
 const mapStateToProps = state => {
   return {
-    // todos: state.addReducer.todos
+    // todos: state.todoReducer.todos
   };
 };
 

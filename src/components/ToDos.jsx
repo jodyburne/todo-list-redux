@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { DEL_TODO, TODO_DONE, EDIT_TODO } from './actionTypes/actionTypes';
+import { Table } from 'reactstrap';
+import { DEL_TODO, TODO_DONE, EDIT_TODO } from '../actionTypes/actionTypes';
 import EditToDo from './EditToDo';
 
 function ToDos(props) {
@@ -18,15 +19,17 @@ function ToDos(props) {
   };
 
   const filterCompleted = todo => {
-    return state.completedChecked ? todo.accomplished === false : todo;
+    return state.completedChecked ? !todo.accomplished : todo;
   };
 
   const toggleSort = () => {
-    if (state.alpha === false && state.reverse === false) setState({ ...state, alpha: true });
-    else if (state.alpha === true && state.reverse === false)
+    if (!state.alpha && !state.reverse) {
+      setState({ ...state, alpha: true });
+    } else if (state.alpha && !state.reverse) {
       setState({ ...state, alpha: false, reverse: true });
-    else if (state.alpha === false && state.reverse === true)
+    } else if (!state.alpha && state.reverse) {
       setState({ ...state, reverse: false });
+    }
   };
 
   const handleSort = (a, b) => {
@@ -34,12 +37,29 @@ function ToDos(props) {
     if (state.reverse) return a.task < b.task ? 1 : -1;
     return a.id > b.id ? 1 : -1;
   };
+
   return (
-    <div>
-      <button type="button" onClick={toggleSort}>
-        List
-      </button>
-      <table>
+    <div className="main">
+      {!state.alpha && !state.reverse && (
+        <button className="borderless-btn" type="button" onClick={toggleSort}>
+          {' '}
+          Alphabetical
+        </button>
+      )}
+      {state.alpha && (
+        <button className="borderless-btn" type="button" onClick={toggleSort}>
+          {' '}
+          Reverse alphabetical
+        </button>
+      )}
+      {state.reverse && (
+        <button type="button" className="borderless-btn" onClick={toggleSort}>
+          {' '}
+          Creation order
+        </button>
+      )}
+
+      <Table>
         <thead>
           <tr>
             <th>Tasks</th>
@@ -54,21 +74,37 @@ function ToDos(props) {
               !item.edit ? (
                 <tr key={item.id}>
                   <td>
-                    <input type="checkbox" name={item.id} onClick={props.handleChecked} />
+                    <input
+                      type="radio"
+                      name={item.id}
+                      onClick={props.handleChecked}
+                      checked={item.accomplished}
+                    />
                   </td>
                   <td
                     style={{
-                      textDecoration: item.accomplished && 'line-through'
+                      textDecoration: item.accomplished && 'line-through',
+                      color: item.accomplished && '#5cb85c'
                     }}
                   >
                     {item.task}
                   </td>
                   <td>
                     {' '}
-                    <button onClick={props.handleDelete} type="button" name={item.id}>
+                    <button
+                      className="borderless-btn"
+                      onClick={props.handleDelete}
+                      type="button"
+                      name={item.id}
+                    >
                       delete
                     </button>
-                    <button onClick={props.handleEdit} type="button" name={item.id}>
+                    <button
+                      className="borderless-btn"
+                      onClick={props.handleEdit}
+                      type="button"
+                      name={item.id}
+                    >
                       Edit
                     </button>
                   </td>
@@ -82,7 +118,7 @@ function ToDos(props) {
               )
             )}
         </tbody>
-      </table>
+      </Table>
       <span>Hide completed</span>
       <input
         checked={state.completedChecked}
